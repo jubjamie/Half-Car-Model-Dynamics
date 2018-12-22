@@ -1,28 +1,18 @@
-function [roadProfile] = getRoadProfile(ProfileData)
+function [distanceVector,roadProfile] = getRoadProfile(roadProfile,timeStep,fidelity,v_speed,trailingDistance,upcomingDistance)
 %GETROADPROFILE Summary of this function goes here
 %   Detailed explanation goes here
 
-%Create uniform road profile.
-%Create uniform timedata
-timepoints=[0:1/100:max(ProfileData.Time)];
-pointcount=numel(timepoints);
-roadProfile=zeros(1,pointcount);
+trailingTime=trailingDistance/v_speed;
+upcomingTime=upcomingDistance/v_speed;
+trailingDataSteps=trailingTime*fidelity;
+upcomingDataSteps=upcomingTime*fidelity;
 
-parfor i=1:pointcount
-    timestamp=timepoints(i);
-    %Find value at front suspension (i.e. at timestep)
-    rightIndex=find(ProfileData.Time>=timestamp,1,'first');
-    rightValue=ProfileData.Data(rightIndex);
-    rightTime=ProfileData.Time(rightIndex);
-    if rightIndex>1
-        leftValue=ProfileData.Data(rightIndex-1);
-        leftTime=ProfileData.Time(rightIndex-1);
-    else
-        leftValue=0;
-        leftTime=0;
-    end
-    roadProfile(i)=leftValue+(((timestamp-leftTime)/(rightTime-leftTime))*(rightValue-leftValue));
-end
+%Create distance vector
+%Total time to cover
+totalSteps=trailingDataSteps+upcomingDataSteps;
+totalDistance=trailingDistance++upcomingDistance;
+distanceVector=linspace(0,totalDistance,totalSteps);
+
 
 end
 
