@@ -1,12 +1,12 @@
 % Main script to create plot for simulation using matlab getframe and movie
-fidelity=20;
+fidelity=35;
+
 %Each section below creates a different part of the plot.
 
 %Create time uniform road profile
 roadProfile=uniformData(Forcing,fidelity);
-visRoad=6+a+b;
-trailingDistance=b+(visRoad/2);
-upcomingDistance=a+(visRoad/2);
+trailingDistance=a+b+3;
+upcomingDistance=3;
 trailingTime=trailingDistance/v_speed;
 upcomingTime=upcomingDistance/v_speed;
 trailingDataSteps=ceil(trailingTime*fidelity);
@@ -25,14 +25,20 @@ frontDisplacements=uniformData(Displacements.Front_Offset,fidelity)+bodyDisplace
 backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+bodyDisplacements;
 
 %Wheel Bits
-wheelRadius=0.07;
-backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,fidelity)+wheelRadius+0.01;
-frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,fidelity)+wheelRadius+0.01;
+% Wheel Data Offsets as wheels don't act at same timestep as centre does.
+backWheelDataSteps=ceil(fidelity*b/v_speed);
+frontWheelDataSteps=ceil(fidelity*a/v_speed);
+
+wheelRadius=0.06;
+backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,fidelity)+wheelRadius;
+backWheelDisplacements=padarray(backWheelDisplacements,[0, backWheelDataSteps],'pre');
+frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,fidelity)+wheelRadius;
 
 %Other
 thetas=uniformData(Pitch.Theta,fidelity);
 
 %loop to make frames
+aspectX=720*totalDistance/(2*1280);
 disp('Creating Video File');
 v=VideoWriter('playback.avi');
 open(v);
@@ -41,31 +47,46 @@ disp('Making Frames');
 for i=1:numel(bodyDisplacements)
    progressbar(i/numel(bodyDisplacements));
    f1=figure('Position',[0 0 1280 720],'visible','off');
+   
    %Car profile
    carVector=[backDisplacements(i),bodyDisplacements(i),frontDisplacements(i)];
    carVector=carVector+0.3;
    carPositions=[-b,0,a];
    %Plot car base
    plot(carPositions,carVector);
-   xlim([-trailingDistance, upcomingDistance]);
+   xlim([-trailingDistance+a, upcomingDistance+a]);
    ylim([0,2]);
    hold on;
    %Plot Car body
    [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),totalDistance);
    plot(cardetailX,cardetailY,'b-');
+   
    %Plot road profile
-   plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-');
+   plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-'); %CHECK THIS
+   
    % Plot Wheels
    %Front
-   ellipse(wheelRadius*totalDistance/2,wheelRadius,0,carPositions(3),frontWheelDisplacements(i),'b');
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),frontWheelDisplacements(i)+0.02,'b');
+   hline(frontWheelDisplacements(i)-wheelRadius);
+   if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps)
+      plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)+0.02);
+   end
    %Rear
-   ellipse(wheelRadius*totalDistance/2,wheelRadius,0,carPositions(1),backWheelDisplacements(i),'b');
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),backWheelDisplacements(i)+0.02,'b');
+   
+   %Other text bits
+   txt = ['Time: ' num2str(i/fidelity) 's'];
+   text(a,1.5,txt)
+   
    hold off;
+   
+   %Add to file
    writeVideo(v,getframe(f1));
 end
 close(v);
 disp('Frames Made');
 progressbar(1);
+beep; pause(0.2); beep; pause(0.2); beep;
 %{
 playbackFigure=figure('Position',[0 0 1280 720]);
 movie(playbackFigure, frames,3,fidelity);
