@@ -1,5 +1,5 @@
 % Main script to create plot for simulation using matlab getframe and movie
-fidelity=35;
+fidelity=20;
 
 %Each section below creates a different part of the plot.
 
@@ -26,12 +26,12 @@ backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+bodyDisplaceme
 
 %Wheel Bits
 % Wheel Data Offsets as wheels don't act at same timestep as centre does.
-backWheelDataSteps=ceil(fidelity*b/v_speed);
-frontWheelDataSteps=ceil(fidelity*a/v_speed);
+backWheelDataSteps=ceil(fidelity*(a+b)/v_speed);
+frontWheelDataSteps=0;
 
 wheelRadius=0.06;
 backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,fidelity)+wheelRadius;
-backWheelDisplacements=padarray(backWheelDisplacements,[0, backWheelDataSteps],'pre');
+%backWheelDisplacements=padarray(backWheelDisplacements,[0, backWheelDataSteps],'pre');
 frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,fidelity)+wheelRadius;
 
 %Other
@@ -41,6 +41,7 @@ thetas=uniformData(Pitch.Theta,fidelity);
 aspectX=720*totalDistance/(2*1280);
 disp('Creating Video File');
 v=VideoWriter('playback.avi');
+v.FrameRate=fidelity;
 open(v);
 progressbar('Making Frames');
 disp('Making Frames');
@@ -70,6 +71,7 @@ for i=1:numel(bodyDisplacements)
    hline(frontWheelDisplacements(i)-wheelRadius);
    if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps)
       plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)+0.02);
+      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)+0.02);
    end
    %Rear
    ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),backWheelDisplacements(i)+0.02,'b');
