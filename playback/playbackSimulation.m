@@ -23,6 +23,13 @@ roadProfile=padarray(roadProfile,[0,upcomingDataSteps],'post');
 bodyDisplacements=uniformData(Displacements.Body_Displacement,fidelity);
 frontDisplacements=uniformData(Displacements.Front_Offset,fidelity)+bodyDisplacements;
 backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+bodyDisplacements;
+
+%Wheel Bits
+wheelRadius=0.07;
+backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,fidelity)+wheelRadius+0.01;
+frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,fidelity)+wheelRadius+0.01;
+
+%Other
 thetas=uniformData(Pitch.Theta,fidelity);
 
 %loop to make frames
@@ -48,6 +55,11 @@ for i=1:numel(bodyDisplacements)
    plot(cardetailX,cardetailY,'b-');
    %Plot road profile
    plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-');
+   % Plot Wheels
+   %Front
+   ellipse(wheelRadius*totalDistance/2,wheelRadius,0,carPositions(3),frontWheelDisplacements(i),'b');
+   %Rear
+   ellipse(wheelRadius*totalDistance/2,wheelRadius,0,carPositions(1),backWheelDisplacements(i),'b');
    hold off;
    writeVideo(v,getframe(f1));
 end
