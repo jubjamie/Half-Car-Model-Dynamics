@@ -15,7 +15,7 @@ upcomingDataSteps=ceil(upcomingTime*fidelity);
 %Total time to cover
 totalSteps=trailingDataSteps+upcomingDataSteps;
 totalDistance=trailingDistance+upcomingDistance;
-distanceVector=linspace(-trailingDistance,upcomingDistance,totalSteps);
+distanceVector=linspace(-trailingDistance+a, upcomingDistance+a,totalSteps);
 roadProfile=padarray(roadProfile,[0,trailingDataSteps],'pre');
 roadProfile=padarray(roadProfile,[0,upcomingDataSteps],'post');
 
