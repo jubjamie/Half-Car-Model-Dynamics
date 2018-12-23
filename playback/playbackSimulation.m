@@ -26,16 +26,17 @@ backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+bodyDisplaceme
 thetas=uniformData(Pitch.Theta,fidelity);
 
 %loop to make frames
-frames=0;
-frames=struct('cdata', cell(1,numel(bodyDisplacements)), 'colormap', cell(1,numel(bodyDisplacements)));
-%progressbar('Making Frames');
+disp('Creating Video File');
+v=VideoWriter('playback.avi');
+open(v);
+progressbar('Making Frames');
 disp('Making Frames');
-parfor i=1:numel(bodyDisplacements)
-   %progressbar(i/numel(bodyDisplacements));
+for i=1:numel(bodyDisplacements)
+   progressbar(i/numel(bodyDisplacements));
    f1=figure('Position',[0 0 1280 720],'visible','off');
    %Car profile
    carVector=[backDisplacements(i),bodyDisplacements(i),frontDisplacements(i)];
-   carVector=carVector+1;
+   carVector=carVector+0.3;
    carPositions=[-b,0,a];
    %Plot car base
    plot(carPositions,carVector);
@@ -48,8 +49,12 @@ parfor i=1:numel(bodyDisplacements)
    %Plot road profile
    plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-');
    hold off;
-   frames(i)=getframe(f1);
+   writeVideo(v,getframe(f1));
 end
-disp('Frames Mode');
+close(v);
+disp('Frames Made');
+progressbar(1);
+%{
 playbackFigure=figure('Position',[0 0 1280 720]);
 movie(playbackFigure, frames,3,fidelity);
+%}
