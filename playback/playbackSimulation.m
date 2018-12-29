@@ -34,6 +34,8 @@ backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,fidelity)
 %backWheelDisplacements=padarray(backWheelDisplacements,[0, backWheelDataSteps],'pre');
 frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,fidelity)+wheelRadius;
 
+wheelSettle=-((m1+m2)*g)/kT;
+
 %Other
 thetas=uniformData(Pitch.Theta,fidelity);
 
@@ -67,14 +69,14 @@ for i=1:numel(bodyDisplacements)
    
    % Plot Wheels
    %Front
-   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),frontWheelDisplacements(i)+0.02,'b');
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),frontWheelDisplacements(i)-wheelSettle,'b');
    hline(frontWheelDisplacements(i)-wheelRadius);
    if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps)
-      plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)+0.02);
-      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)+0.02);
+      plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)-wheelSettle);
+      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)-wheelSettle);
    end
    %Rear
-   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),backWheelDisplacements(i)+0.02,'b');
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),backWheelDisplacements(i)-wheelSettle,'b');
    
    %Other text bits
    txt = ['Time: ' num2str(i/fidelity) 's'];
