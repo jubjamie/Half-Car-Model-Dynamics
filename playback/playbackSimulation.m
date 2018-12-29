@@ -67,7 +67,7 @@ for i=1:numel(bodyDisplacements)
    plot(cardetailX,cardetailY,'b-');
    
    %Plot road profile
-   plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-'); %CHECK THIS
+   plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-','LineWidth',2); %CHECK THIS
    
    % Plot Wheels
    %Front
