@@ -26,7 +26,7 @@ backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+bodyDisplaceme
 
 %Wheel Bits
 % Wheel Data Offsets as wheels don't act at same timestep as centre does.
-backWheelDataSteps=ceil(fidelity*(a+b)/v_speed);
+backWheelDataSteps=floor(fidelity*(a+b)/v_speed);
 frontWheelDataSteps=0;
 
 wheelRadius=0.06;
@@ -71,9 +71,9 @@ for i=1:numel(bodyDisplacements)
    %Front
    ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),frontWheelDisplacements(i)-wheelSettle,'b');
    hline(frontWheelDisplacements(i)-wheelRadius);
-   if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps)
+   if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps-backWheelDataSteps)
       plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)-wheelSettle);
-      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)-wheelSettle);
+      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps+backWheelDataSteps:i+upcomingDataSteps+backWheelDataSteps-1)-wheelSettle);
    end
    %Rear
    ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),backWheelDisplacements(i)-wheelSettle,'b');
