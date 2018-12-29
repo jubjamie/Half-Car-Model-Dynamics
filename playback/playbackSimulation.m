@@ -1,5 +1,5 @@
 % Main script to create plot for simulation using matlab getframe and movie
-fidelity=30;
+fidelity=25;
 
 %Each section below creates a different part of the plot.
 
