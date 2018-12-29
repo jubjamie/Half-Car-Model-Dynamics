@@ -38,6 +38,8 @@ wheelSettle=-((m1+m2)*g)/kT;
 
 %Other
 thetas=uniformData(Pitch.Theta,fidelity);
+bodyCenterDataSteps=floor(fidelity*a/v_speed);
+bodySettle=(-m1*g/ks)+wheelSettle;
 
 %loop to make frames
 aspectX=720*totalDistance/(2*1280);
@@ -74,6 +76,7 @@ for i=1:numel(bodyDisplacements)
    if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps-backWheelDataSteps)
       plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+upcomingDataSteps-1)-wheelSettle);
       plot(distanceVector,backWheelDisplacements(i-trailingDataSteps+backWheelDataSteps:i+upcomingDataSteps+backWheelDataSteps-1)-wheelSettle);
+      plot(distanceVector,bodyDisplacements(i-trailingDataSteps+bodyCenterDataSteps:i+upcomingDataSteps+bodyCenterDataSteps-1)+0.3);
    end
    %Rear
    ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),backWheelDisplacements(i)-wheelSettle,'b');
