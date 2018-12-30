@@ -5,10 +5,10 @@ answer = questdlg('Load Workspace?', ...
 switch answer
     case 'Yes'
         prompt = {'Filename'};
-        title = 'Load Workspace';
+        Ptitle = 'Load Workspace';
         dims = [1 35];
         definput = {'baseVehicleData'};
-        loadName = inputdlg(prompt,title,dims,definput);
+        loadName = inputdlg(prompt,Ptitle,dims,definput);
         load(loadName{1});
     case 'No'
         disp('Not saving Workspace Variables');
