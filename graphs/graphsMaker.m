@@ -20,3 +20,4 @@ legend('CoM Displacement','Front Point Displacement','Rear Point Displacement','
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title('Car Point Displacements with Overlaid Relative Forcing');
+saveas(f11,'graphs/carDisplacementMulti.png');
