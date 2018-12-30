@@ -16,7 +16,7 @@ plot(Forcing.Time,Forcing.Data+bodySettle,'g--');
 set(f11,'Position',[250 250 900 450]);
 hold off;
 grid on;
-legend('CoM Displacement','Front Point Displacement','Rear Point Displacement');
+legend('CoM Displacement','Front Point Displacement','Rear Point Displacement','Relative Road Forcing Input');
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title('Car Point Displacements with Overlaid Relative Forcing');
