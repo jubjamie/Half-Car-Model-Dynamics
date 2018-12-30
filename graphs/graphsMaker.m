@@ -1,7 +1,6 @@
 % Make graphs for report - Half Body
 
 %% Car Displacement Replica
-clf(11);
 f11=figure(11);
 plot(Displacements.Body_Displacement.Time,Displacements.Body_Displacement.Data,'k-');
 hold on;

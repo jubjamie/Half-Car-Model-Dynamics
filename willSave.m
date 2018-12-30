@@ -9,6 +9,7 @@ switch answer
         dims = [1 35];
         definput = {'baseVehicleData'};
         saveName = inputdlg(prompt,Ptitle,dims,definput);
+        clear f11;
         save(saveName{1});
     case 'No'
         disp('Not saving Workspace Variables')
