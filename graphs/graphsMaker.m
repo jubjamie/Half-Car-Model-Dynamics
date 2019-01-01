@@ -1,6 +1,8 @@
 % Make graphs for report - Half Body
 %Get settings
-roadProfileType=
+roadProfilesList={'Step','Sine Road','Zero','Pulses','Humpback'};
+roadProfileType=string(roadProfilesList{str2num(get_param('halfmodel/Forcing Selector/Road Profile Control Signal','Value'))});
+disp(roadProfileType);
 
 %% Car Displacement Replica
 f11=figure(11);
@@ -18,10 +20,11 @@ set(f11,'Position',[250 250 900 450]);
 hold off;
 grid on;
 legend('CoM Displacement','Front Point Displacement','Rear Point Displacement','Relative Road Forcing Input');
+legend('Location','Southeast');
 xlabel('Time (s)');
 ylabel('Displacement (m)');
-title('Car Point Displacements with Overlaid Relative Forcing');
-saveas(f11,'graphs/carDisplacementMulti.png');
+title(['Car Point Displacements with Overlaid Relative Forcing - Road Profile: ' + roadProfileType]);
+saveas(f11,['graphs/carDisplacementMulti_' + roadProfileType + '.png']);
 
 %% Wheel Displacements
 f12=figure(12);
@@ -33,7 +36,8 @@ set(f12,'Position',[250 250 900 450]);
 hold off;
 grid on;
 legend('Front Wheel Displacement','Rear Wheel Displacement');
+legend('Location','Southeast');
 xlabel('Time (s)');
 ylabel('Displacement (m)');
-title('Wheel Displacements');
-saveas(f12,'graphs/wheelDisplacementMulti.png');
+title(['Wheel Displacements - Road Profile: ' + roadProfileType]);
+saveas(f12,['graphs/wheelDisplacementMulti_' + roadProfileType + '.png']);
