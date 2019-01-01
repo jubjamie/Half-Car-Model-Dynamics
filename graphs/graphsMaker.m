@@ -6,7 +6,7 @@ disp(roadProfileType);
 
 %% Car Displacement Replica
 f11=figure(11);
-plot(Displacements.Body_Displacement.Time,Displacements.Body_Displacement.Data,'k-');
+plot(Displacements.Body_Displacement.Time,Displacements.Body_Displacement.Data,'k-','LineWidth',1.2);
 hold on;
 plot(Displacements.Front_Offset.Time,Displacements.Front_Offset.Data+Displacements.Body_Displacement.Data,'r-');
 plot(Displacements.Back_Offset.Time,Displacements.Back_Offset.Data+Displacements.Body_Displacement.Data,'b-');
@@ -21,10 +21,16 @@ hold off;
 grid on;
 legend('CoM Displacement','Front Point Displacement','Rear Point Displacement','Relative Road Forcing Input');
 legend('Location','Southeast');
+
+delete(findall(gcf,'type','annotation'));
+dim = [.482 .1334 .185 .083];
+str = ['Road Profile: ' + roadProfileType + newline + 'Vehicle Speed: ' + num2str(v_speed) + ' m/s'];
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title(['Car Point Displacements with Overlaid Relative Forcing - Road Profile: ' + roadProfileType]);
-saveas(f11,['graphs/carDisplacementMulti_' + roadProfileType + '.png']);
+saveas(f11,['graphs/carDisplacementMulti_' + roadProfileType + '_' + v_speed + '.png']);
 
 %% Wheel Displacements
 f12=figure(12);
@@ -37,7 +43,12 @@ hold off;
 grid on;
 legend('Front Wheel Displacement','Rear Wheel Displacement');
 legend('Location','Southeast');
+
+delete(findall(gcf,'type','annotation'));
+dim = [.482 .1334 .185 .083];
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title(['Wheel Displacements - Road Profile: ' + roadProfileType]);
-saveas(f12,['graphs/wheelDisplacementMulti_' + roadProfileType + '.png']);
+saveas(f12,['graphs/wheelDisplacementMulti_' + roadProfileType + '_' + v_speed + '.png']);
