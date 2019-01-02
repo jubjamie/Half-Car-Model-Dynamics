@@ -7,7 +7,7 @@ function [detailX,detailY] = makeCarBody(carX,carY,theta,totalDistance)
 baseGradient=(carY(2)-carY(1))/(carX(2)-carX(1));
 normalGradient=-1/baseGradient;
 
-aspectX=720*totalDistance/(2*1280);
+aspectX=720*totalDistance/(3*1280);
 
 theta=asin(theta);
 

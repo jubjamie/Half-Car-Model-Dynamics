@@ -1,5 +1,5 @@
 % Main script to create plot for simulation using matlab getframe and movie
-fidelity=25;
+fidelity=30;
 
 %Each section below creates a different part of the plot.
 
@@ -42,7 +42,7 @@ bodyCenterDataSteps=floor(fidelity*a/v_speed);
 bodySettle=(-m1*g/ks)+wheelSettle;
 
 %loop to make frames
-aspectX=720*totalDistance/(2*1280);
+aspectX=720*totalDistance/(3*1280);
 disp('Creating Video File');
 v=VideoWriter('playback.avi');
 v.FrameRate=fidelity;
@@ -60,7 +60,7 @@ for i=1:numel(bodyDisplacements)
    %Plot car base
    plot(carPositions,carVector);
    xlim([-trailingDistance+a, upcomingDistance+a]);
-   ylim([0,2]);
+   ylim([0,3]);
    hold on;
    %Plot Car body
    [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),totalDistance);
