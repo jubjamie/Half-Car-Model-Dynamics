@@ -1,5 +1,5 @@
 % Main script to create plot for simulation using matlab getframe and movie
-fidelity=30;
+fidelity=25;
 
 %Each section below creates a different part of the plot.
 
@@ -60,7 +60,7 @@ for i=1:numel(bodyDisplacements)
    %Plot car base
    plot(carPositions,carVector);
    xlim([-trailingDistance+a, upcomingDistance+a]);
-   ylim([0,3]);
+   ylim([-2.5,0.5]);
    hold on;
    %Plot Car body
    [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),totalDistance);
