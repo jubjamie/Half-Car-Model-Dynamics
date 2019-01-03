@@ -30,7 +30,7 @@ annotation('textbox',dim,'String',str,'FitBoxToText','on');
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title(['Car Point Displacements with Overlaid Relative Forcing - Road Profile: ' + roadProfileType]);
-saveas(f11,['graphs/carDisplacementMulti_' + roadProfileType + '_' + v_speed + '.png']);
+saveas(f11,['graphs/overview/carDisplacementMulti_' + roadProfileType + '_' + v_speed + '.png']);
 
 %% Wheel Displacements
 f12=figure(12);
@@ -51,4 +51,4 @@ annotation('textbox',dim,'String',str,'FitBoxToText','on');
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title(['Wheel Displacements - Road Profile: ' + roadProfileType]);
-saveas(f12,['graphs/wheelDisplacementMulti_' + roadProfileType + '_' + v_speed + '.png']);
+saveas(f12,['graphs/overview/wheelDisplacementMulti_' + roadProfileType + '_' + v_speed + '.png']);
