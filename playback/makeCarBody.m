@@ -1,4 +1,4 @@
-function [detailX,detailY] = makeCarBody(carX,carY,theta,totalDistance)
+function [detailX,detailY] = makeCarBody(carX,carY,theta,aspectX)
 %MAKECARBODY Create plotting points in cartesian space for the bar body
 %   Using gradient maths from the car base.
 
@@ -6,8 +6,6 @@ function [detailX,detailY] = makeCarBody(carX,carY,theta,totalDistance)
 % Base gradient
 baseGradient=(carY(2)-carY(1))/(carX(2)-carX(1));
 normalGradient=-1/baseGradient;
-
-aspectX=720*totalDistance/(3*1280);
 
 theta=asin(theta);
 

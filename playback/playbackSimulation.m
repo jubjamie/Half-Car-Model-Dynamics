@@ -41,8 +41,10 @@ thetas=uniformData(Pitch.Theta,fidelity);
 bodyCenterDataSteps=floor(fidelity*a/v_speed);
 bodySettle=(-m1*g/ks)+wheelSettle;
 
+ylimits=[min(min(roadProfile),0),max(max(roadProfile)+0.5,3)];
+
 %loop to make frames
-aspectX=720*totalDistance/(3*1280);
+aspectX=720*totalDistance/((ylimits(2)-ylimits(1))*1280);
 disp('Creating Video File');
 v=VideoWriter('playback.avi');
 v.FrameRate=fidelity;
@@ -60,10 +62,10 @@ for i=1:numel(bodyDisplacements)
    %Plot car base
    plot(carPositions,carVector);
    xlim([-trailingDistance+a, upcomingDistance+a]);
-   ylim([-2.5,0.5]);
+   ylim(ylimits);
    hold on;
    %Plot Car body
-   [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),totalDistance);
+   [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),aspectX);
    plot(cardetailX,cardetailY,'b-');
    
    %Plot road profile
@@ -83,7 +85,7 @@ for i=1:numel(bodyDisplacements)
    
    %Other text bits
    txt = ['Time: ' num2str(i/fidelity) 's'];
-   text(a,1.5,txt)
+   text(3,ylimits(2)-0.5,txt)
    
    hold off;
    
@@ -93,8 +95,5 @@ end
 close(v);
 disp('Frames Made');
 progressbar(1);
+clear f1 v;
 beep; pause(0.2); beep; pause(0.2); beep;
-%{
-playbackFigure=figure('Position',[0 0 1280 720]);
-movie(playbackFigure, frames,3,fidelity);
-%}
