@@ -1,5 +1,5 @@
 % Main script to create plot for simulation using matlab getframe and movie
-fidelity=25;
+fidelity=30;
 
 %Each section below creates a different part of the plot.
 
@@ -41,7 +41,7 @@ thetas=uniformData(Pitch.Theta,fidelity);
 bodyCenterDataSteps=floor(fidelity*a/v_speed);
 bodySettle=(-m1*g/ks)+wheelSettle;
 
-ylimits=[min(min(roadProfile),0),max(max(roadProfile)+0.5,3)];
+ylimits=[min(min(roadProfile),0),max(max(bodyDisplacements)+0.5,3)];
 
 %loop to make frames
 aspectX=720*totalDistance/((ylimits(2)-ylimits(1))*1280);

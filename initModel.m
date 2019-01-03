@@ -32,3 +32,8 @@ v_speed=10; % m/s - Vehicle Speed
 stepValue=-0.2; % m - Step value for step input road profile
 g=9.81; % Acceleration due to gravity.
 
+% Set initial conditions
+wheelSettle=-((m1+m2)*g)/kT;
+bodySettle=(-m1*g/ks)+wheelSettle;
+pitchSettle=-6e-3;
+
