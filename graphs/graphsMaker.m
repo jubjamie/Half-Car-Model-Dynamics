@@ -1,6 +1,6 @@
 % Make graphs for report - Half Body
 %Get settings
-roadProfilesList={'Step','Sine Road','Zero','Pulses','Humpback'};
+roadProfilesList={'Step','Sine Road','Zero','Pulses','Humpback','Random'};
 roadProfileType=string(roadProfilesList{str2num(get_param('halfmodel/Forcing Selector/Road Profile Control Signal','Value'))});
 disp(roadProfileType);
 
