@@ -1,6 +1,6 @@
 % Run the humpback case at different speeds
 % Set speeds and profile type.
-speeds=1:1:15;
+speeds=8:0.1:20;
 set_param('halfmodel/Forcing Selector/Road Profile Control Signal','Value','5');
 
 flightTimes=zeros(1,numel(speeds));
