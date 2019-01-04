@@ -33,7 +33,12 @@ stepValue=-0.2; % m - Step value for step input road profile
 g=9.81; % Acceleration due to gravity.
 
 % Set initial conditions
-wheelSettle=-((m1+m2)*g)/kT;
-bodySettle=(-m1*g/ks)+wheelSettle;
-pitchSettle=-6e-3;
+frontHoldForce=mb*g*b/(a+b);
+rearHoldForce=mb*g*a/(a+b);
+frontWheelSettle=-(frontHoldForce+(m2*g))/kT;
+rearWheelSettle=-(rearHoldForce+(m2*g))/kT;
+frontBodySettle=-(frontHoldForce/ks)+frontWheelSettle;
+rearBodySettle=-(rearHoldForce/ks)+rearWheelSettle;
+bodySettle=frontBodySettle-((frontBodySettle-rearBodySettle)*(a/(a+b)));
+pitchSettle=asin((frontBodySettle-rearBodySettle)/(a+b));
 
