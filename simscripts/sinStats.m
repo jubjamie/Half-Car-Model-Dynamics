@@ -13,7 +13,7 @@ BDdata=BDdata(pps*cutInTime:end);
 timeVector=timeVector(pps*cutInTime:end);
 
 % Split into time strips
-stripSteps=0.2*pps;
+stripSteps=1*pps;
 stripCount=fix(numel(BDdata)/stripSteps);
 BDdataShort=BDdata(1:stripCount*stripSteps);
 BDdataMatrix=reshape(BDdataShort,[stripSteps,stripCount]);
