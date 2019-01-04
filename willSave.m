@@ -5,10 +5,10 @@ answer = questdlg('Save Workspace?', ...
 switch answer
     case 'Yes'
         prompt = {'Filename'};
-        title = 'Save Workspace';
+        Ptitle = 'Save Workspace';
         dims = [1 35];
         definput = {'baseVehicleData'};
-        saveName = inputdlg(prompt,title,dims,definput);
+        saveName = inputdlg(prompt,Ptitle,dims,definput);
         save(saveName{1});
     case 'No'
         disp('Not saving Workspace Variables')
