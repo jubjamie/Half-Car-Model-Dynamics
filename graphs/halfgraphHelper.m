@@ -53,8 +53,8 @@ hold off;
 grid on;
 
 xlabel('Time (s)');
-ylabel('Pitch (rad)');
-title('Half Car Body Pitch');
+ylabel('Angular Velocity (rad/s)');
+title('Half Car Body Angular Velocity');
 set(findall(gcf,'-property','FontSize'),'FontSize',14);
 saveas(f16,['graphs/verification/bodyPitchVelocity_' fext '.png']);
 
