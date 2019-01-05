@@ -25,11 +25,11 @@ m2=20; % kg - Wheel mass
 kT=14e4; % Tyre stiffness
 kTHard=1e10; % Wheel stiffness once tyre is fully compressed
                                      %(i.e. tyre bottoms out)
-tyreLimit=0.2; % Tyre compression before tyre bottoms out to above stiffness
+tyreLimit=1; % Tyre compression before tyre bottoms out to above stiffness
 
 % Simulation
 v_speed=10; % m/s - Vehicle Speed
-stepValue=-0.2; % m - Step value for step input road profile
+stepValue=0.2; % m - Step value for step input road profile
 g=9.81; % Acceleration due to gravity.
 
 % Set initial conditions
