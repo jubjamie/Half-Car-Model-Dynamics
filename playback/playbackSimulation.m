@@ -26,9 +26,9 @@ roadProfile=padarray(roadProfile,[0,upcomingDataSteps],'post');
 %Create time uniform displacements
 bodyDisplacements=uniformData(Displacements.Body_Displacement,fidelity);
 frontDisplacements=uniformData(Displacements.Front_Offset,fidelity)+...
-                    bodyDisplacements;
+    bodyDisplacements;
 backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+...
-                    bodyDisplacements;
+    bodyDisplacements;
 
 %Wheel Bits
 % Wheel Data Offsets as wheels don't act at same timestep as centre does.
@@ -38,9 +38,9 @@ frontWheelDataSteps=0;
 % Set wheel geomtery and data
 wheelRadius=0.06;
 backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,...
-                        fidelity)+wheelRadius;
+    fidelity)+wheelRadius;
 frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,...
-                        fidelity)+wheelRadius;
+    fidelity)+wheelRadius;
 
 %Other
 thetas=uniformData(Pitch.Theta,fidelity);
@@ -62,55 +62,55 @@ disp('Making Frames');
 
 % Loop through frames
 for i=1:numel(bodyDisplacements)
-   progressbar(i/numel(bodyDisplacements));
-   f1=figure('Position',[0 0 1280 720],'visible','off');
-   
-   %Car profile
-   carVector=[backDisplacements(i),bodyDisplacements(i),frontDisplacements(i)];
-   carVector=carVector+0.3;
-   carPositions=[-b,0,a];
-   %Plot car base
-   plot(carPositions,carVector);
-   xlim([-trailingDistance+a, upcomingDistance+a]);
-   ylim(ylimits);
-   hold on;
-   %Plot Car body
-   [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),aspectX);
-   plot(cardetailX,cardetailY,'b-');
-   
-   %Plot road profile
-   plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-','LineWidth',2);
-   
-   % Plot Wheels
-   %Front
-   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),...
-            frontWheelDisplacements(i)-wheelSettle,'b');
-   hline(frontWheelDisplacements(i)-wheelRadius);
-   
-   %Rear
-   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),...
-       backWheelDisplacements(i)-wheelSettle,'b');
-   
-   % Plot data trails when available 
-   if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps...
-                                                        -backWheelDataSteps)
-      plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+...
-                                        upcomingDataSteps-1)-wheelSettle);
-      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps+...
-          backWheelDataSteps:i+upcomingDataSteps+backWheelDataSteps-1)-...
-          wheelSettle);
-      plot(distanceVector,bodyDisplacements(i-trailingDataSteps+...
-          bodyCenterDataSteps:i+upcomingDataSteps+bodyCenterDataSteps-1)+0.3);
-   end
-      
-   %Other text bits
-   txt = ['Time: ' num2str(i/fidelity) 's'];
-   text(3,ylimits(2)-0.5,txt)
-   
-   hold off;
-   
-   %Add to file
-   writeVideo(v,getframe(f1));
+    progressbar(i/numel(bodyDisplacements));
+    f1=figure('Position',[0 0 1280 720],'visible','off');
+    
+    %Car profile
+    carVector=[backDisplacements(i),bodyDisplacements(i),frontDisplacements(i)];
+    carVector=carVector+0.3;
+    carPositions=[-b,0,a];
+    %Plot car base
+    plot(carPositions,carVector);
+    xlim([-trailingDistance+a, upcomingDistance+a]);
+    ylim(ylimits);
+    hold on;
+    %Plot Car body
+    [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),aspectX);
+    plot(cardetailX,cardetailY,'b-');
+    
+    %Plot road profile
+    plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-','LineWidth',2);
+    
+    % Plot Wheels
+    %Front
+    ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),...
+        frontWheelDisplacements(i)-wheelSettle,'b');
+    hline(frontWheelDisplacements(i)-wheelRadius);
+    
+    %Rear
+    ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),...
+        backWheelDisplacements(i)-wheelSettle,'b');
+    
+    % Plot data trails when available
+    if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps...
+            -backWheelDataSteps)
+        plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+...
+            upcomingDataSteps-1)-wheelSettle);
+        plot(distanceVector,backWheelDisplacements(i-trailingDataSteps+...
+            backWheelDataSteps:i+upcomingDataSteps+backWheelDataSteps-1)-...
+            wheelSettle);
+        plot(distanceVector,bodyDisplacements(i-trailingDataSteps+...
+            bodyCenterDataSteps:i+upcomingDataSteps+bodyCenterDataSteps-1)+0.3);
+    end
+    
+    %Other text bits
+    txt = ['Time: ' num2str(i/fidelity) 's'];
+    text(3,ylimits(2)-0.5,txt)
+    
+    hold off;
+    
+    %Add to file
+    writeVideo(v,getframe(f1));
 end
 close(v);
 disp('Frames Made');

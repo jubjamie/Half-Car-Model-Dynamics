@@ -1,6 +1,5 @@
 function [aveAmp] = sinStats(BD,cutInTime)
-%SINSTATS Summary of this function goes here
-%   Detailed explanation goes here
+%SINSTATS Give rough average amplitude of cyclic data
 
 % Uniform the data into 200 points/second.
 pps=200; % Points per second
@@ -17,6 +16,8 @@ stripSteps=1*pps;
 stripCount=fix(numel(BDdata)/stripSteps);
 BDdataShort=BDdata(1:stripCount*stripSteps);
 BDdataMatrix=reshape(BDdataShort,[stripSteps,stripCount]);
+
+% Find min/max and calculate difference
 maxValues=max(BDdataMatrix);
 minValues=min(BDdataMatrix);
 aveAmp=mean(maxValues-minValues)/2;

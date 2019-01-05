@@ -3,6 +3,7 @@
 speeds=0.5:0.25:25;
 set_param('halfmodel/Forcing Selector/Road Profile Control Signal','Value','2');
 
+% Pre-allocate
 amps=zeros(1,numel(speeds));
 frontAmps=amps;
 rearAmps=amps;
@@ -10,6 +11,8 @@ velAmps=amps;
 frontVelAmps=amps;
 rearVelAmps=amps;
 pitchAmps=amps;
+
+% Loop through speeds and sim. Record Data
 for sp=1:numel(speeds)
     disp(['Running Sim @ ' num2str(speeds(sp)) ' m/s']);
     v_speed=speeds(sp);
@@ -26,6 +29,7 @@ for sp=1:numel(speeds)
 end
 disp('Sims Complete');
 
+% Plot displacement cyclic amplitudes
 f21=figure(21);
 hold off;
 plot(speeds,amps);
@@ -41,6 +45,7 @@ set(f21,'Position',[250 250 900 450]);
 set(findall(gcf,'-property','FontSize'),'FontSize',14);
 saveas(f21,'graphs/sin/averageAmps.png');
 
+% Plot velocity cyclic amplitudes
 f22=figure(22);
 hold off;
 plot(speeds,velAmps);
@@ -56,6 +61,7 @@ set(f22,'Position',[250 250 900 450]);
 set(findall(gcf,'-property','FontSize'),'FontSize',14);
 saveas(f22,'graphs/sin/averageVelAmps.png');
 
+% Plot pitch cyclic amplitudes
 f23=figure(23);
 hold off;
 plot(speeds,pitchAmps);

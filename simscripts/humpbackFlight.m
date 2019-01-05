@@ -3,8 +3,11 @@
 speeds=horzcat(0.5:0.5:7.5,8:0.2:18);
 set_param('halfmodel/Forcing Selector/Road Profile Control Signal','Value','5');
 
+% Pre-allocate
 flightTimes=zeros(1,numel(speeds));
 didFlys=zeros(1,numel(speeds));
+
+% Run a sim at each speed and calculate flight times
 for sp=1:numel(speeds)
     disp(['Running Sim @ ' num2str(speeds(sp)) ' m/s']);
     v_speed=speeds(sp);
@@ -16,6 +19,7 @@ for sp=1:numel(speeds)
 end
 disp('Sims Complete');
 
+% Plot
 f45=figure(45);
 hold off;
 plot(speeds,flightTimes);

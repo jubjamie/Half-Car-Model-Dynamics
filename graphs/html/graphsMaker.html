@@ -1,0 +1,202 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>graphsMaker</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-01-05"><meta name="DC.source" content="graphsMaker.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Make graphs for report - Half Body</span>
+<span class="comment">%Get settings</span>
+roadProfilesList={<span class="string">'Step'</span>,<span class="string">'Sine Road'</span>,<span class="string">'Zero'</span>,<span class="string">'Pulses'</span>,<span class="string">'Humpback'</span>,<span class="string">'Random'</span>};
+roadProfileType=string(roadProfilesList{str2num(get_param(<span class="keyword">...</span>
+    <span class="string">'halfmodel/Forcing Selector/Road Profile Control Signal'</span>,<span class="string">'Value'</span>))});
+disp(roadProfileType);
+ForcingDataFix=reshape(Forcing.Data(1,1,:),numel(Forcing.Time),1);
+
+<span class="comment">% Car Displacement Replica</span>
+f11=figure(11);
+plot(Displacements.Body_Displacement.Time,<span class="keyword">...</span>
+    Displacements.Body_Displacement.Data,<span class="string">'k-'</span>,<span class="string">'LineWidth'</span>,1.2);
+hold <span class="string">on</span>;
+plot(Displacements.Front_Offset.Time,<span class="keyword">...</span>
+    Displacements.Front_Offset.Data+Displacements.Body_Displacement.Data,<span class="string">'r-'</span>);
+plot(Displacements.Back_Offset.Time,<span class="keyword">...</span>
+    Displacements.Back_Offset.Data+Displacements.Body_Displacement.Data,<span class="string">'b-'</span>);
+
+
+plot(Forcing.Time,ForcingDataFix+bodySettle,<span class="string">'g--'</span>);
+set(f11,<span class="string">'Position'</span>,[250 250 900 450]);
+hold <span class="string">off</span>;
+grid <span class="string">on</span>;
+legend(<span class="string">'CoM Displacement'</span>,<span class="string">'Front Point Displacement'</span>,<span class="keyword">...</span>
+    <span class="string">'Rear Point Displacement'</span>,<span class="string">'Relative Road Forcing Input'</span>);
+legend(<span class="string">'Location'</span>,<span class="string">'Southeast'</span>);
+
+delete(findall(gcf,<span class="string">'type'</span>,<span class="string">'annotation'</span>));
+dim = [0.3464,0.138622,0.22611,0.1288];
+str = [<span class="string">'Road Profile: '</span> + roadProfileType + newline + <span class="string">'Vehicle Speed: '</span> +<span class="keyword">...</span>
+    num2str(v_speed) + <span class="string">' m/s'</span>];
+annotation(<span class="string">'textbox'</span>,dim,<span class="string">'String'</span>,str,<span class="string">'FitBoxToText'</span>,<span class="string">'on'</span>);
+
+xlabel(<span class="string">'Time (s)'</span>);
+ylabel(<span class="string">'Displacement (m)'</span>);
+title([<span class="string">'Car Point Displacements with Overlaid Relative Forcing - Road Profile: '</span><span class="keyword">...</span>
+    + roadProfileType]);
+set(findall(gcf,<span class="string">'-property'</span>,<span class="string">'FontSize'</span>),<span class="string">'FontSize'</span>,14);
+saveas(f11,[<span class="string">'graphs/overview/carDisplacementMulti_'</span> + roadProfileType +<span class="keyword">...</span>
+    <span class="string">'_'</span> + v_speed + <span class="string">'.png'</span>]);
+
+<span class="comment">% Wheel Displacements</span>
+f12=figure(12);
+plot(Wheels_Data.Front_Wheel_Displacement.Time,<span class="keyword">...</span>
+    Wheels_Data.Front_Wheel_Displacement.Data,<span class="string">'r-'</span>);
+hold <span class="string">on</span>;
+plot(Wheels_Data.Rear_Wheel_Displacement.Time,<span class="keyword">...</span>
+    Wheels_Data.Rear_Wheel_Displacement.Data,<span class="string">'b-'</span>);
+
+set(f12,<span class="string">'Position'</span>,[250 250 900 450]);
+hold <span class="string">off</span>;
+grid <span class="string">on</span>;
+legend(<span class="string">'Front Wheel Displacement'</span>,<span class="string">'Rear Wheel Displacement'</span>);
+legend(<span class="string">'Location'</span>,<span class="string">'Southeast'</span>);
+
+delete(findall(gcf,<span class="string">'type'</span>,<span class="string">'annotation'</span>));
+dim = [0.64422,0.28306,0.25499,0.12888];
+annotation(<span class="string">'textbox'</span>,dim,<span class="string">'String'</span>,str,<span class="string">'FitBoxToText'</span>,<span class="string">'on'</span>);
+
+xlabel(<span class="string">'Time (s)'</span>);
+ylabel(<span class="string">'Displacement (m)'</span>);
+title([<span class="string">'Wheel Displacements - Road Profile: '</span> + roadProfileType]);
+set(findall(gcf,<span class="string">'-property'</span>,<span class="string">'FontSize'</span>),<span class="string">'FontSize'</span>,14);
+saveas(f12,[<span class="string">'graphs/overview/wheelDisplacementMulti_'</span> + roadProfileType +<span class="keyword">...</span>
+    <span class="string">'_'</span> + v_speed + <span class="string">'.png'</span>]);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Make graphs for report - Half Body
+%Get settings
+roadProfilesList={'Step','Sine Road','Zero','Pulses','Humpback','Random'};
+roadProfileType=string(roadProfilesList{str2num(get_param(...
+    'halfmodel/Forcing Selector/Road Profile Control Signal','Value'))});
+disp(roadProfileType);
+ForcingDataFix=reshape(Forcing.Data(1,1,:),numel(Forcing.Time),1);
+
+% Car Displacement Replica
+f11=figure(11);
+plot(Displacements.Body_Displacement.Time,...
+    Displacements.Body_Displacement.Data,'k-','LineWidth',1.2);
+hold on;
+plot(Displacements.Front_Offset.Time,...
+    Displacements.Front_Offset.Data+Displacements.Body_Displacement.Data,'r-');
+plot(Displacements.Back_Offset.Time,...
+    Displacements.Back_Offset.Data+Displacements.Body_Displacement.Data,'b-');
+
+
+plot(Forcing.Time,ForcingDataFix+bodySettle,'gREPLACE_WITH_DASH_DASH');
+set(f11,'Position',[250 250 900 450]);
+hold off;
+grid on;
+legend('CoM Displacement','Front Point Displacement',...
+    'Rear Point Displacement','Relative Road Forcing Input');
+legend('Location','Southeast');
+
+delete(findall(gcf,'type','annotation'));
+dim = [0.3464,0.138622,0.22611,0.1288];
+str = ['Road Profile: ' + roadProfileType + newline + 'Vehicle Speed: ' +...
+    num2str(v_speed) + ' m/s'];
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
+xlabel('Time (s)');
+ylabel('Displacement (m)');
+title(['Car Point Displacements with Overlaid Relative Forcing - Road Profile: '...
+    + roadProfileType]);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
+saveas(f11,['graphs/overview/carDisplacementMulti_' + roadProfileType +...
+    '_' + v_speed + '.png']);
+
+% Wheel Displacements
+f12=figure(12);
+plot(Wheels_Data.Front_Wheel_Displacement.Time,...
+    Wheels_Data.Front_Wheel_Displacement.Data,'r-');
+hold on;
+plot(Wheels_Data.Rear_Wheel_Displacement.Time,...
+    Wheels_Data.Rear_Wheel_Displacement.Data,'b-');
+
+set(f12,'Position',[250 250 900 450]);
+hold off;
+grid on;
+legend('Front Wheel Displacement','Rear Wheel Displacement');
+legend('Location','Southeast');
+
+delete(findall(gcf,'type','annotation'));
+dim = [0.64422,0.28306,0.25499,0.12888];
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
+xlabel('Time (s)');
+ylabel('Displacement (m)');
+title(['Wheel Displacements - Road Profile: ' + roadProfileType]);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
+saveas(f12,['graphs/overview/wheelDisplacementMulti_' + roadProfileType +...
+    '_' + v_speed + '.png']);
+##### SOURCE END #####
+--></body></html>

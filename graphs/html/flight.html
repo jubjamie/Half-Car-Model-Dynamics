@@ -1,0 +1,146 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>flight</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-01-05"><meta name="DC.source" content="flight.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Plot graphs for wheel flight</span>
+<span class="comment">% Get road type information</span>
+roadProfilesList={<span class="string">'Step'</span>,<span class="string">'Sine Road'</span>,<span class="string">'Zero'</span>,<span class="string">'Pulses'</span>,<span class="string">'Humpback'</span>,<span class="string">'Random'</span>};
+roadProfileType=string(roadProfilesList{str2num(get_param(<span class="keyword">...</span>
+    <span class="string">'halfmodel/Forcing Selector/Road Profile Control Signal'</span>,<span class="string">'Value'</span>))});
+disp(roadProfileType);
+
+<span class="comment">% Plot data</span>
+f40=figure(40);
+<span class="comment">% Plot car flight thicker</span>
+plot(FlightDetect.Both_Wheels.Time,FlightDetect.Both_Wheels.Data,<span class="string">'k-'</span>,<span class="keyword">...</span>
+                                                        <span class="string">'LineWidth'</span>,1.5);
+hold <span class="string">on</span>;
+plot(FlightDetect.Ind_Wheel_Bus.Front_Flight_Value.Time,<span class="keyword">...</span>
+    FlightDetect.Ind_Wheel_Bus.Front_Flight_Value.Data,<span class="string">'r--'</span>);
+plot(FlightDetect.Ind_Wheel_Bus.Rear_Flight_Value.Time,<span class="keyword">...</span>
+    FlightDetect.Ind_Wheel_Bus.Rear_Flight_Value.Data,<span class="string">'b--'</span>);
+
+set(f40,<span class="string">'Position'</span>,[250 250 900 450]);
+hold <span class="string">off</span>;
+grid <span class="string">on</span>;
+legend(<span class="string">'Half Car Flight'</span>,<span class="string">'Front Wheel Flight'</span>,<span class="string">'Rear Wheel Flight'</span>);
+legend(<span class="string">'Location'</span>,<span class="string">'Northwest'</span>);
+ylim([0,2]);
+
+delete(findall(gcf,<span class="string">'type'</span>,<span class="string">'annotation'</span>));
+dim = [0.3764,0.7675,0.2549,0.1288];
+str = [<span class="string">'Road Profile: '</span> + roadProfileType + newline +<span class="keyword">...</span>
+        <span class="string">'Vehicle Speed: '</span> + num2str(v_speed) + <span class="string">' m/s'</span>];
+annotation(<span class="string">'textbox'</span>,dim,<span class="string">'String'</span>,str,<span class="string">'FitBoxToText'</span>,<span class="string">'on'</span>);
+
+xlabel(<span class="string">'Time (s)'</span>);
+ylabel(<span class="string">'Displacement (m)'</span>);
+title([<span class="string">'Car/Wheel Flight Periods - Road Profile: '</span> + roadProfileType]);
+set(findall(gcf,<span class="string">'-property'</span>,<span class="string">'FontSize'</span>),<span class="string">'FontSize'</span>,14);
+saveas(f40,[<span class="string">'graphs/flight/flightCombined_'</span> + roadProfileType +<span class="keyword">...</span>
+                                            <span class="string">'_'</span> + v_speed + <span class="string">'.png'</span>]);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Plot graphs for wheel flight
+% Get road type information
+roadProfilesList={'Step','Sine Road','Zero','Pulses','Humpback','Random'};
+roadProfileType=string(roadProfilesList{str2num(get_param(...
+    'halfmodel/Forcing Selector/Road Profile Control Signal','Value'))});
+disp(roadProfileType);
+
+% Plot data
+f40=figure(40);
+% Plot car flight thicker
+plot(FlightDetect.Both_Wheels.Time,FlightDetect.Both_Wheels.Data,'k-',...
+                                                        'LineWidth',1.5);
+hold on;
+plot(FlightDetect.Ind_Wheel_Bus.Front_Flight_Value.Time,...
+    FlightDetect.Ind_Wheel_Bus.Front_Flight_Value.Data,'rREPLACE_WITH_DASH_DASH');
+plot(FlightDetect.Ind_Wheel_Bus.Rear_Flight_Value.Time,...
+    FlightDetect.Ind_Wheel_Bus.Rear_Flight_Value.Data,'bREPLACE_WITH_DASH_DASH');
+
+set(f40,'Position',[250 250 900 450]);
+hold off;
+grid on;
+legend('Half Car Flight','Front Wheel Flight','Rear Wheel Flight');
+legend('Location','Northwest');
+ylim([0,2]);
+
+delete(findall(gcf,'type','annotation'));
+dim = [0.3764,0.7675,0.2549,0.1288];
+str = ['Road Profile: ' + roadProfileType + newline +...
+        'Vehicle Speed: ' + num2str(v_speed) + ' m/s'];
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
+xlabel('Time (s)');
+ylabel('Displacement (m)');
+title(['Car/Wheel Flight Periods - Road Profile: ' + roadProfileType]);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
+saveas(f40,['graphs/flight/flightCombined_' + roadProfileType +...
+                                            '_' + v_speed + '.png']);
+##### SOURCE END #####
+--></body></html>
