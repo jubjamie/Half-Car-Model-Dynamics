@@ -9,11 +9,12 @@ plot(Displacements.Body_Displacement.Time,Displacements.Body_Displacement.Data,'
 set(f11,'Position',[250 250 900 450]);
 hold off;
 grid on;
-
+%ylim([-1,1]);
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title('Half Car Body Vertical Displacement');
 set(findall(gcf,'-property','FontSize'),'FontSize',14);
+delete(findall(gcf,'type','annotation'));
 saveas(f11,['graphs/verification/bodyDisplacement_' fext '.png']);
 
 %% Car Velocity
@@ -23,7 +24,7 @@ plot(Displacements.Body_Velocity.Time,Displacements.Body_Velocity.Data,'r-','Lin
 set(f12,'Position',[250 250 900 450]);
 hold off;
 grid on;
-
+%ylim([-1,1]);
 xlabel('Time (s)');
 ylabel('Velocity (m/s)');
 title('Half Car Body Vertical Velocity');
@@ -57,6 +58,20 @@ ylabel('Angular Velocity (rad/s)');
 title('Half Car Body Angular Velocity');
 set(findall(gcf,'-property','FontSize'),'FontSize',14);
 saveas(f16,['graphs/verification/bodyPitchVelocity_' fext '.png']);
+
+%% Angular Acceleration
+f17=figure(17);
+plot(Pitch.Theta_dotdot.Time,Pitch.Theta_dotdot.Data,'g-','LineWidth',1.2);
+
+set(f17,'Position',[250 250 900 450]);
+hold off;
+grid on;
+
+xlabel('Time (s)');
+ylabel('Angular Velocity (rad/s^2)');
+title('Half Car Body Angular Acceleration');
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
+saveas(f17,['graphs/verification/bodyPitchAcel_' fext '.png']);
 
 %% Wheel Displacements
 f13=figure(13);
