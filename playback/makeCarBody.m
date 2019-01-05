@@ -31,7 +31,9 @@ wsTop=[wsTopX,wsTopY]+(0.35.*[-sin(theta)*aspectX,cos(theta)]);
 peakTop=[carX(2),carY(2)]+(0.42.*[-sin(theta)*aspectX,cos(theta)]);
 
 
-detailX=[carX(1),bootTop(1),bootFront(1),peakTop(1),wsTop(1),bonnetBack(1),bonnetFront(1),carX(3)];
-detailY=[carY(1),bootTop(2),bootFront(2),peakTop(2),wsTop(2),bonnetBack(2),bonnetFront(2),carY(3)];
+detailX=[carX(1),bootTop(1),bootFront(1),peakTop(1),wsTop(1),bonnetBack(1),...
+    bonnetFront(1),carX(3)];
+detailY=[carY(1),bootTop(2),bootFront(2),peakTop(2),wsTop(2),bonnetBack(2),...
+    bonnetFront(2),carY(3)];
 end
 
