@@ -18,11 +18,12 @@ legend('Location','Northwest');
 ylim([0,2]);
 
 delete(findall(gcf,'type','annotation'));
-dim = [0.315333333333333,0.803066668918403,0.185555550356706,0.097777775526047];
+dim = [0.376444444444444,0.767511114290031,0.254999992731545,0.128888885709975];
 str = ['Road Profile: ' + roadProfileType + newline + 'Vehicle Speed: ' + num2str(v_speed) + ' m/s'];
 annotation('textbox',dim,'String',str,'FitBoxToText','on');
 
 xlabel('Time (s)');
 ylabel('Displacement (m)');
 title(['Car/Wheel Flight Periods - Road Profile: ' + roadProfileType]);
-saveas(f11,['graphs/flight/flightCombined_' + roadProfileType + '_' + v_speed + '.png']);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
+saveas(f40,['graphs/flight/flightCombined_' + roadProfileType + '_' + v_speed + '.png']);

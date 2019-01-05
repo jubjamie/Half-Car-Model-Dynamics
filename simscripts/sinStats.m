@@ -19,6 +19,6 @@ BDdataShort=BDdata(1:stripCount*stripSteps);
 BDdataMatrix=reshape(BDdataShort,[stripSteps,stripCount]);
 maxValues=max(BDdataMatrix);
 minValues=min(BDdataMatrix);
-aveAmp=mean(maxValues-minValues);
+aveAmp=mean(maxValues-minValues)/2;
 end
 

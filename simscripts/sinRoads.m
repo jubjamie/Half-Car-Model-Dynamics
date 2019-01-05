@@ -9,6 +9,7 @@ rearAmps=amps;
 velAmps=amps;
 frontVelAmps=amps;
 rearVelAmps=amps;
+pitchAmps=amps;
 for sp=1:numel(speeds)
     disp(['Running Sim @ ' num2str(speeds(sp)) ' m/s']);
     v_speed=speeds(sp);
@@ -21,6 +22,7 @@ for sp=1:numel(speeds)
     velAmps(sp)=sinStats(Displacements.Body_Velocity,5);
     frontVelAmps(sp)=sinStats(Displacements.Front_Combined_Velocity,5);
     rearVelAmps(sp)=sinStats(Displacements.Rear_Combined_Velocity,5);
+    pitchAmps(sp)=sinStats(Pitch.Theta,5);
 end
 disp('Sims Complete');
 
@@ -31,11 +33,12 @@ hold on;
 plot(speeds,frontAmps);
 plot(speeds,rearAmps);
 xlabel('Vehicle Speed (m/s)');
-ylabel('Average Body Displacement Amplitude (m/s)');
+ylabel('Average Body Displacement Amplitude (m)');
 title('Average Body Displacement Amplitude on the Sinousoidal Road at Different Speeds');
 legend('CoM','Front','Rear');
 grid on;
-set(f21,'Position',[150 150 800 550]);
+set(f21,'Position',[250 250 900 450]);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
 saveas(f21,'graphs/sin/averageAmps.png');
 
 f22=figure(22);
@@ -45,9 +48,22 @@ hold on;
 plot(speeds,frontVelAmps);
 plot(speeds,rearVelAmps);
 xlabel('Vehicle Speed (m/s)');
-ylabel('Average Body Velocity Amplitude (m)');
+ylabel('Average Body Velocity Amplitude (m/s)');
 title('Average Body Velocity Amplitude on the Sinousoidal Road at Different Speeds');
 legend('CoM','Front Point','Rear Point');
 grid on;
-set(f22,'Position',[150 150 800 550]);
+set(f22,'Position',[250 250 900 450]);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
 saveas(f22,'graphs/sin/averageVelAmps.png');
+
+f23=figure(23);
+hold off;
+plot(speeds,pitchAmps);
+xlabel('Vehicle Speed (m/s)');
+ylabel('Average Body Pitching Amplitude (rad)');
+title('Average Body Pitching Amplitude on the Sinousoidal Road at Different Speeds');
+%legend('CoM','Front Point','Rear Point');
+grid on;
+set(f23,'Position',[250 250 900 450]);
+set(findall(gcf,'-property','FontSize'),'FontSize',14);
+saveas(f23,'graphs/sin/averagePitchAmps.png');
