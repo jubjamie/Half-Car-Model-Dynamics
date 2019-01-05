@@ -1,0 +1,314 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>playbackSimulation</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-01-05"><meta name="DC.source" content="playbackSimulation.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% Main script to create plot for simulation using matlab getframe and movie</span>
+fidelity=30;
+
+<span class="comment">%Each section below creates a different part of the plot.</span>
+
+<span class="comment">%Create time uniform road profile</span>
+roadProfile=uniformData(Forcing,fidelity);
+<span class="comment">% Set physical domain space</span>
+trailingDistance=a+b+3;
+upcomingDistance=3;
+<span class="comment">% Relate distances to data steps</span>
+trailingTime=trailingDistance/v_speed;
+upcomingTime=upcomingDistance/v_speed;
+trailingDataSteps=ceil(trailingTime*fidelity);
+upcomingDataSteps=ceil(upcomingTime*fidelity);
+
+<span class="comment">%Create distance vector</span>
+<span class="comment">%Total time to cover</span>
+totalSteps=trailingDataSteps+upcomingDataSteps;
+totalDistance=trailingDistance+upcomingDistance;
+distanceVector=linspace(-trailingDistance+a, upcomingDistance+a,totalSteps);
+<span class="comment">% Pad road profile array to give data for unsimulated time.</span>
+roadProfile=padarray(roadProfile,[0,trailingDataSteps],<span class="string">'pre'</span>);
+roadProfile=padarray(roadProfile,[0,upcomingDataSteps],<span class="string">'post'</span>);
+
+<span class="comment">%Create time uniform displacements</span>
+bodyDisplacements=uniformData(Displacements.Body_Displacement,fidelity);
+frontDisplacements=uniformData(Displacements.Front_Offset,fidelity)+<span class="keyword">...</span>
+                    bodyDisplacements;
+backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+<span class="keyword">...</span>
+                    bodyDisplacements;
+
+<span class="comment">%Wheel Bits</span>
+<span class="comment">% Wheel Data Offsets as wheels don't act at same timestep as centre does.</span>
+backWheelDataSteps=floor(fidelity*(a+b)/v_speed);
+frontWheelDataSteps=0;
+
+<span class="comment">% Set wheel geomtery and data</span>
+wheelRadius=0.06;
+backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,<span class="keyword">...</span>
+                        fidelity)+wheelRadius;
+frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,<span class="keyword">...</span>
+                        fidelity)+wheelRadius;
+
+<span class="comment">%Other</span>
+thetas=uniformData(Pitch.Theta,fidelity);
+bodyCenterDataSteps=floor(fidelity*a/v_speed);
+
+<span class="comment">% Dynamically set axes height for scenarios outside normal scope.</span>
+ylimits=[min(min(roadProfile),0),max(max(bodyDisplacements)+0.5,3)];
+
+<span class="comment">% Calculate the aspect ratio skew for drawing</span>
+aspectX=720*totalDistance/((ylimits(2)-ylimits(1))*1280);
+
+<span class="comment">% Set up VideoWriter</span>
+disp(<span class="string">'Creating Video File'</span>);
+v=VideoWriter(<span class="string">'playback.avi'</span>);
+v.FrameRate=fidelity;
+open(v);
+progressbar(<span class="string">'Making Frames'</span>);
+disp(<span class="string">'Making Frames'</span>);
+
+<span class="comment">% Loop through frames</span>
+<span class="keyword">for</span> i=1:numel(bodyDisplacements)
+   progressbar(i/numel(bodyDisplacements));
+   f1=figure(<span class="string">'Position'</span>,[0 0 1280 720],<span class="string">'visible'</span>,<span class="string">'off'</span>);
+
+   <span class="comment">%Car profile</span>
+   carVector=[backDisplacements(i),bodyDisplacements(i),frontDisplacements(i)];
+   carVector=carVector+0.3;
+   carPositions=[-b,0,a];
+   <span class="comment">%Plot car base</span>
+   plot(carPositions,carVector);
+   xlim([-trailingDistance+a, upcomingDistance+a]);
+   ylim(ylimits);
+   hold <span class="string">on</span>;
+   <span class="comment">%Plot Car body</span>
+   [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),aspectX);
+   plot(cardetailX,cardetailY,<span class="string">'b-'</span>);
+
+   <span class="comment">%Plot road profile</span>
+   plot(distanceVector,roadProfile(i:i+totalSteps-1),<span class="string">'r-'</span>,<span class="string">'LineWidth'</span>,2);
+
+   <span class="comment">% Plot Wheels</span>
+   <span class="comment">%Front</span>
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),<span class="keyword">...</span>
+            frontWheelDisplacements(i)-wheelSettle,<span class="string">'b'</span>);
+   hline(frontWheelDisplacements(i)-wheelRadius);
+
+   <span class="comment">%Rear</span>
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),<span class="keyword">...</span>
+       backWheelDisplacements(i)-wheelSettle,<span class="string">'b'</span>);
+
+   <span class="comment">% Plot data trails when available</span>
+   <span class="keyword">if</span> i&gt;trailingDataSteps &amp;&amp; i&lt;(numel(bodyDisplacements)-upcomingDataSteps<span class="keyword">...</span>
+                                                        -backWheelDataSteps)
+      plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+<span class="keyword">...</span>
+                                        upcomingDataSteps-1)-wheelSettle);
+      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps+<span class="keyword">...</span>
+          backWheelDataSteps:i+upcomingDataSteps+backWheelDataSteps-1)-<span class="keyword">...</span>
+          wheelSettle);
+      plot(distanceVector,bodyDisplacements(i-trailingDataSteps+<span class="keyword">...</span>
+          bodyCenterDataSteps:i+upcomingDataSteps+bodyCenterDataSteps-1)+0.3);
+   <span class="keyword">end</span>
+
+   <span class="comment">%Other text bits</span>
+   txt = [<span class="string">'Time: '</span> num2str(i/fidelity) <span class="string">'s'</span>];
+   text(3,ylimits(2)-0.5,txt)
+
+   hold <span class="string">off</span>;
+
+   <span class="comment">%Add to file</span>
+   writeVideo(v,getframe(f1));
+<span class="keyword">end</span>
+close(v);
+disp(<span class="string">'Frames Made'</span>);
+<span class="comment">% Clean up</span>
+progressbar(1);
+clear <span class="string">f1</span> <span class="string">v</span>; <span class="comment">% Remove containers from workspaces</span>
+<span class="comment">% Beep to alert user video has been created.</span>
+beep; pause(0.2); beep; pause(0.2); beep;
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Main script to create plot for simulation using matlab getframe and movie
+fidelity=30;
+
+%Each section below creates a different part of the plot.
+
+%Create time uniform road profile
+roadProfile=uniformData(Forcing,fidelity);
+% Set physical domain space
+trailingDistance=a+b+3;
+upcomingDistance=3;
+% Relate distances to data steps
+trailingTime=trailingDistance/v_speed;
+upcomingTime=upcomingDistance/v_speed;
+trailingDataSteps=ceil(trailingTime*fidelity);
+upcomingDataSteps=ceil(upcomingTime*fidelity);
+
+%Create distance vector
+%Total time to cover
+totalSteps=trailingDataSteps+upcomingDataSteps;
+totalDistance=trailingDistance+upcomingDistance;
+distanceVector=linspace(-trailingDistance+a, upcomingDistance+a,totalSteps);
+% Pad road profile array to give data for unsimulated time.
+roadProfile=padarray(roadProfile,[0,trailingDataSteps],'pre');
+roadProfile=padarray(roadProfile,[0,upcomingDataSteps],'post');
+
+%Create time uniform displacements
+bodyDisplacements=uniformData(Displacements.Body_Displacement,fidelity);
+frontDisplacements=uniformData(Displacements.Front_Offset,fidelity)+...
+                    bodyDisplacements;
+backDisplacements=uniformData(Displacements.Back_Offset,fidelity)+...
+                    bodyDisplacements;
+
+%Wheel Bits
+% Wheel Data Offsets as wheels don't act at same timestep as centre does.
+backWheelDataSteps=floor(fidelity*(a+b)/v_speed);
+frontWheelDataSteps=0;
+
+% Set wheel geomtery and data
+wheelRadius=0.06;
+backWheelDisplacements=uniformData(Wheels_Data.Rear_Wheel_Displacement,...
+                        fidelity)+wheelRadius;
+frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,...
+                        fidelity)+wheelRadius;
+
+%Other
+thetas=uniformData(Pitch.Theta,fidelity);
+bodyCenterDataSteps=floor(fidelity*a/v_speed);
+
+% Dynamically set axes height for scenarios outside normal scope.
+ylimits=[min(min(roadProfile),0),max(max(bodyDisplacements)+0.5,3)];
+
+% Calculate the aspect ratio skew for drawing
+aspectX=720*totalDistance/((ylimits(2)-ylimits(1))*1280);
+
+% Set up VideoWriter
+disp('Creating Video File');
+v=VideoWriter('playback.avi');
+v.FrameRate=fidelity;
+open(v);
+progressbar('Making Frames');
+disp('Making Frames');
+
+% Loop through frames
+for i=1:numel(bodyDisplacements)
+   progressbar(i/numel(bodyDisplacements));
+   f1=figure('Position',[0 0 1280 720],'visible','off');
+   
+   %Car profile
+   carVector=[backDisplacements(i),bodyDisplacements(i),frontDisplacements(i)];
+   carVector=carVector+0.3;
+   carPositions=[-b,0,a];
+   %Plot car base
+   plot(carPositions,carVector);
+   xlim([-trailingDistance+a, upcomingDistance+a]);
+   ylim(ylimits);
+   hold on;
+   %Plot Car body
+   [cardetailX, cardetailY]=makeCarBody(carPositions,carVector,thetas(i),aspectX);
+   plot(cardetailX,cardetailY,'b-');
+   
+   %Plot road profile
+   plot(distanceVector,roadProfile(i:i+totalSteps-1),'r-','LineWidth',2);
+   
+   % Plot Wheels
+   %Front
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(3),...
+            frontWheelDisplacements(i)-wheelSettle,'b');
+   hline(frontWheelDisplacements(i)-wheelRadius);
+   
+   %Rear
+   ellipse(wheelRadius*aspectX,wheelRadius,0,carPositions(1),...
+       backWheelDisplacements(i)-wheelSettle,'b');
+   
+   % Plot data trails when available 
+   if i>trailingDataSteps && i<(numel(bodyDisplacements)-upcomingDataSteps...
+                                                        -backWheelDataSteps)
+      plot(distanceVector,frontWheelDisplacements(i-trailingDataSteps:i+...
+                                        upcomingDataSteps-1)-wheelSettle);
+      plot(distanceVector,backWheelDisplacements(i-trailingDataSteps+...
+          backWheelDataSteps:i+upcomingDataSteps+backWheelDataSteps-1)-...
+          wheelSettle);
+      plot(distanceVector,bodyDisplacements(i-trailingDataSteps+...
+          bodyCenterDataSteps:i+upcomingDataSteps+bodyCenterDataSteps-1)+0.3);
+   end
+      
+   %Other text bits
+   txt = ['Time: ' num2str(i/fidelity) 's'];
+   text(3,ylimits(2)-0.5,txt)
+   
+   hold off;
+   
+   %Add to file
+   writeVideo(v,getframe(f1));
+end
+close(v);
+disp('Frames Made');
+% Clean up
+progressbar(1);
+clear f1 v; % Remove containers from workspaces
+% Beep to alert user video has been created.
+beep; pause(0.2); beep; pause(0.2); beep;
+##### SOURCE END #####
+--></body></html>
