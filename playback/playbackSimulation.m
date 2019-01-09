@@ -45,6 +45,7 @@ frontWheelDisplacements=uniformData(Wheels_Data.Front_Wheel_Displacement,...
 %Other
 thetas=uniformData(Pitch.Theta,fidelity);
 bodyCenterDataSteps=floor(fidelity*a/v_speed);
+wheelSettle=mean([rearWheelSettle,frontWheelSettle]);
 
 % Dynamically set axes height for scenarios outside normal scope.
 ylimits=[min(min(roadProfile),0),max(max(bodyDisplacements)+0.5,3)];
